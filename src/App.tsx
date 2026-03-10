@@ -360,7 +360,7 @@ export default function App() {
             <div style={S.ptsCard}>
               <div style={S.lbl}>YOUR INVITE CODE</div>
               <div style={S.codeRow}>
-                <div style={S.codeVal}>{user?.referral_code || 'PRX-XXXXXX'}</div>
+                <div style={S.codeVal}>{user?.active_invite_code || 'No slots remaining'}</div>
                 <button style={S.copyBtn} onClick={() => sdk.actions.openUrl(`https://warpcast.com/~/compose?text=Join Node with my invite code: ${user?.referral_code || ''}`)}>Share</button>
               </div>
               <div style={{ fontSize: 11, color: '#555', marginTop: 8 }}>Single-use — once someone uses your code it's locked to them</div>
