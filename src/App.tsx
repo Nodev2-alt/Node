@@ -136,6 +136,8 @@ export default function App() {
       username: ctx?.user?.username || '',
       display_name: ctx?.user?.displayName || '',
       pfp_url: ctx?.user?.pfpUrl || '',
+      fid,
+      wallet: address,
       invite_code: inviteCode.trim(),
     });
     if (data.user) { setUser(data.user); setNeedsInvite(false); loadUser(fid, address); }
