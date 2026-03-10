@@ -19,6 +19,7 @@ async function apiFetch(path: string, fid: number, wallet: string, body?: object
 const TIER_COLOR: Record<string, string> = { bronze: '#cd7f32', silver: '#94a3b8', gold: '#f59e0b', diamond: '#8b5cf6' };
 const TIER_EMOJI: Record<string, string> = { bronze: '🥉', silver: '🥈', gold: '🥇', diamond: '💎' };
 const TIER_MULTI: Record<string, number> = { bronze: 1, silver: 5, gold: 10, diamond: 30 };
+const TIER_INTERVAL: Record<string, number> = { bronze: 60000, silver: 30000, gold: 30000, diamond: 30000 };
 
 function fmt(s: number) {
   const h = String(Math.floor(s / 3600)).padStart(2, '0');
@@ -101,12 +102,13 @@ export default function App() {
 
   function startTick(f: number, w: string, tier: string) {
     const multi = TIER_MULTI[tier] || 1;
+    const interval = TIER_INTERVAL[tier] || 60000;
     tickRef.current = setInterval(async () => {
       await apiFetch('/node/tick', f, w, {});
       setSessionPts(p => p + multi);
       setPulsing(true);
       setTimeout(() => setPulsing(false), 600);
-    }, 30000);
+    }, interval);
     uptimeRef.current = setInterval(() => setUptime(u => u + 1), 1000);
   }
 
@@ -223,7 +225,8 @@ export default function App() {
         onKeyDown={e => { if (e.key === 'Enter') handleRegister(); }}
       />
       {inviteError && <div style={S.invErr}>{inviteError}</div>}
-      <button style={S.invBtn} onClick={handleRegister}>Enter Node</button>
+      <button style={S.invBtn} onClick={() => handleRegister(false)}>Enter Node</button>
+      <button style={{...S.invBtn, background: 'transparent', border: '1px solid #333', color: '#fff', marginTop: 8}} onClick={() => handleRegister(true)}>Skip — Join as Bronze</button>
       <div style={S.invWallet}>{address.slice(0,6)}...{address.slice(-4)}</div>
     </div>
   );
