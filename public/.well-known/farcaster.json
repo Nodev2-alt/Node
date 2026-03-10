@@ -1,1 +1,18 @@
-{}
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjI4NzE4NjksInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHhBZkQ3Y0UwRDZlZDkwNDg3ODMwZjg0Njc4Y0IyYkJhRkZGM2MxQzEzIn0",
+    "payload": "eyJkb21haW4iOiJub2RldjItdGhldGEudmVyY2VsLmFwcCJ9",
+    "signature": "d5SDyZAfDN4LyYvZjDKURS9qvBF0ctHJkDd277t4gjBmzrkia2l6vKwc7SCrSj42Ep8sGP72aVCuxoea4MfCWRw="
+  },
+  "frame": {
+    "version": "1",
+    "name": "Node",
+    "iconUrl": "https://nodev2-theta.vercel.app/icon.png",
+    "homeUrl": "https://nodev2-theta.vercel.app",
+    "imageUrl": "https://nodev2-theta.vercel.app/image.png",
+    "buttonTitle": "Run Node",
+    "splashImageUrl": "https://nodev2-theta.vercel.app/icon.png",
+    "splashBackgroundColor": "#000000",
+    "webhookUrl": "https://node-backend-tiff.onrender.com/webhook"
+  }
+}
