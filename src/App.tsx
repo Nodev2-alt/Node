@@ -138,6 +138,8 @@ export default function App() {
       pfp_url: ctx?.user?.pfpUrl || '',
       fid,
       wallet: address,
+      fid,
+      wallet: address,
       invite_code: inviteCode.trim(),
     });
     if (data.user) { setUser(data.user); setNeedsInvite(false); loadUser(fid, address); }
