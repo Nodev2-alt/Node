@@ -167,17 +167,21 @@ export default function App() {
 
   async function handleUpgrade(tier: string, priceUsdc: number) {
     if (!address) return;
-    const amountInUsdc = BigInt(priceUsdc * 1_000_000);
+    const amounts: Record<string, string> = { silver: '5000000', gold: '15000000', diamond: '30000000' };
+    const amount = amounts[tier];
+    if (!amount) return;
     try {
-      await sdk.actions.sendToken({
-        token: `eip155:8453:erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`,
-        amount: String(amountInUsdc),
-        recipientAddress: `0x7E6B746c463BDe6B5718d8296f0B0B05B5b64f0a`,
+      const result = await sdk.actions.sendToken({
+        token: 'eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+        amount,
+        recipientAddress: '0x7E6B746c463BDe6B5718d8296f0B0B05B5b64f0a',
       });
-      const res = await apiFetch(`/payment/verify`, fid, address, { tier, amount: priceUsdc });
+      const txHash = (result as any)?.send?.transaction;
+      if (!txHash) return;
+      const res = await apiFetch('/payment/verify', fid, address, { tier, tx_hash: txHash });
       if (res.success) {
         setUser((u: User) => ({ ...u, tier: res.tier, invite_slots: res.invite_slots }));
-        setTab(`node`);
+        setTab('node');
       }
     } catch (e) { console.error(e); }
   }
