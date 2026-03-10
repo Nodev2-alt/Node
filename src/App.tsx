@@ -165,7 +165,7 @@ export default function App() {
     }
   }
 
-  async function handleUpgrade(tier: string, priceUsdc: number) {
+  async function handleUpgrade(tier: string, _priceUsdc: number) {
     if (!address) return;
     const amounts: Record<string, string> = { silver: '5000000', gold: '15000000', diamond: '30000000' };
     const amount = amounts[tier];
