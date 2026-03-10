@@ -165,6 +165,23 @@ export default function App() {
     }
   }
 
+  async function handleUpgrade(tier: string, priceUsdc: number) {
+    if (!address) return;
+    const amountInUsdc = BigInt(priceUsdc * 1_000_000);
+    try {
+      await sdk.actions.sendToken({
+        token: `eip155:8453:erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`,
+        amount: String(amountInUsdc),
+        recipientAddress: `0x7E6B746c463BDe6B5718d8296f0B0B05B5b64f0a`,
+      });
+      const res = await apiFetch(`/payment/verify`, fid, address, { tier, amount: priceUsdc });
+      if (res.success) {
+        setUser((u: User) => ({ ...u, tier: res.tier, invite_slots: res.invite_slots }));
+        setTab(`node`);
+      }
+    } catch (e) { console.error(e); }
+  }
+
   async function handleTabChange(t: Tab) {
     setTab(t);
     if (t === 'referral' && !referrals && address) {
@@ -330,7 +347,7 @@ export default function App() {
                   style={userTier === t.tier || t.tier === 'bronze'
                     ? { ...S.btnDis, margin: '0 16px 16px', width: 'calc(100% - 32px)' }
                     : { ...S.btnPri, margin: '0 16px 16px', width: 'calc(100% - 32px)' }}
-                  disabled={userTier === t.tier || t.tier === 'bronze'}
+                  onClick={() => t.tier !== 'bronze' && userTier !== t.tier && handleUpgrade(t.tier, t.tier === 'silver' ? 5 : t.tier === 'gold' ? 15 : 30)} disabled={userTier === t.tier || t.tier === 'bronze'}
                 >
                   {userTier === t.tier ? 'Current Tier' : t.tier === 'bronze' ? 'Free' : `Upgrade to ${t.tier.charAt(0).toUpperCase() + t.tier.slice(1)}`}
                 </button>
