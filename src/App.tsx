@@ -78,7 +78,16 @@ export default function App() {
       const data = await apiFetch('/user/me', f, w);
       if (data.user) {
         setUser(data.user);
-        if (data.node?.is_active) { setNodeOn(true); startTick(f, w, data.user.tier); }
+        if (data.node?.is_active) {
+          setNodeOn(true);
+          const elapsed = data.node.started_at
+            ? Math.floor((Date.now() - new Date(data.node.started_at).getTime()) / 1000)
+            : 0;
+          setUptime(elapsed);
+          const earnedSoFar = Math.floor(elapsed / 30) * (TIER_MULTI[data.user.tier] || 1);
+          setSessionPts(earnedSoFar);
+          startTick(f, w, data.user.tier);
+        }
         if (data.claim?.can_claim) setClaimReady(true);
         else if (data.claim?.next_claim_at) startClaimCd(new Date(data.claim.next_claim_at));
         const lb = await apiFetch('/leaderboard', f, w);
