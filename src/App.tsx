@@ -128,7 +128,7 @@ export default function App() {
   }
 
   async function handleRegister(_skipInvite?: boolean) {
-    if (!inviteCode.trim()) return setInviteError('Enter your invite code');
+    if (!_skipInvite && !inviteCode.trim()) return setInviteError('Enter your invite code');
     if (!address) return setInviteError('Wallet not connected');
     setInviteError('');
     const check = await apiFetch(`/referral/resolve/${inviteCode.trim()}`, fid, address);
