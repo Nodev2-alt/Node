@@ -45,6 +45,8 @@ export default function App() {
   const [claimCountdown, setClaimCountdown] = useState(0);
   const [leaderboard, setLeaderboard] = useState<any>(null);
   const [referrals, setReferrals] = useState<any>(null);
+  const [refInputCode, setRefInputCode] = useState('');
+  const [refLinkMsg, setRefLinkMsg] = useState('');
   const [loading, setLoading] = useState(true);
   const [pulsing, setPulsing] = useState(false);
 
@@ -138,6 +140,13 @@ export default function App() {
       invite_code: '',
     });
     if (data.user) { setUser(data.user); loadUser(f, w); }
+  }
+
+  async function handleLinkReferrer() {
+    if (!refInputCode.trim()) return setRefLinkMsg("Enter a code");
+    const res = await apiFetch(`/user/link-referrer`, fid, address!, { invite_code: refInputCode.trim() });
+    if (res.success) { setRefLinkMsg("✓ Referrer linked!"); loadUser(fid, address!); }
+    else setRefLinkMsg(res.error || "Invalid code");
   }
 
   async function handleToggleNode() {
@@ -342,6 +351,22 @@ export default function App() {
           <div style={{ padding: 16 }}>
             <div style={S.pageTitle}>Referrals</div>
             <div style={S.pageSub}>Each invite code is single-use — one person per code</div>
+
+            {!user?.referred_by && (
+              <div style={{...S.ptsCard, marginBottom: 12}}>
+                <div style={S.lbl}>HAVE A REFERRER CODE?</div>
+                <div style={S.codeRow}>
+                  <input
+                    style={{...S.input, flex: 1, marginRight: 8, textTransform: 'uppercase'}}
+                    placeholder="PRX-XXXXXX"
+                    value={refInputCode}
+                    onChange={e => setRefInputCode(e.target.value.toUpperCase())}
+                  />
+                  <button style={S.copyBtn} onClick={handleLinkReferrer}>Link</button>
+                </div>
+                {refLinkMsg && <div style={{fontSize: 12, color: refLinkMsg.startsWith('✓') ? '#10b981' : '#ef4444', marginTop: 6}}>{refLinkMsg}</div>}
+              </div>
+            )}
 
             <div style={S.ptsCard}>
               <div style={S.lbl}>REFERRAL EARNINGS</div>
