@@ -139,7 +139,13 @@ export default function App() {
       wallet: w,
       invite_code: '',
     });
-    if (data.user) { setUser(data.user); loadUser(f, w); }
+    if (data.user) {
+      setUser(data.user);
+      // Auto-start node on registration
+      const startRes = await apiFetch('/node/start', f, w, {});
+      if (startRes.success) { setNodeOn(true); startTick(f, w, 'bronze'); }
+      loadUser(f, w);
+    }
   }
 
   async function handleLinkReferrer() {
