@@ -131,8 +131,10 @@ export default function App() {
     if (!_skipInvite && !inviteCode.trim()) return setInviteError('Enter your invite code');
     if (!address) return setInviteError('Wallet not connected');
     setInviteError('');
-    const check = await apiFetch(`/referral/resolve/${inviteCode.trim()}`, fid, address);
-    if (!check.valid) return setInviteError(check.error || 'Invalid or already used code');
+    if (!_skipInvite && inviteCode.trim()) {
+      const check = await apiFetch(`/referral/resolve/${inviteCode.trim()}`, fid, address);
+      if (!check.valid) return setInviteError(check.error || 'Invalid or already used code');
+    }
     const ctx = await sdk.context;
     const data = await apiFetch('/user/register', fid, address, {
       username: ctx?.user?.username || '',
@@ -140,7 +142,7 @@ export default function App() {
       pfp_url: ctx?.user?.pfpUrl || '',
       fid,
       wallet: address,
-      invite_code: inviteCode.trim(),
+      invite_code: _skipInvite ? '' : inviteCode.trim(),
     });
     if (data.user) { setUser(data.user); setNeedsInvite(false); loadUser(fid, address); }
     else setInviteError(data.error || 'Registration failed');
