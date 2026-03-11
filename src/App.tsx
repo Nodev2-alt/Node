@@ -199,16 +199,10 @@ export default function App() {
     }
   }
 
-  if (loading) return (
-    <div style={S.center}>
-      <div style={S.bigN}>N</div>
-      <div style={S.loadTxt}>LOADING NODE...</div>
-    </div>
-  );
+  if (loading) return null;
 
   if (!isConnected || !address) return (
     <div style={S.center}>
-      <div style={S.bigN}>N</div>
       <div style={S.invTitle}>NODE</div>
       <div style={S.invSub}>Connect your wallet to continue</div>
       <button style={S.invBtn} onClick={() => connect({ connector: connectors[0] })}>Connect Wallet</button>
@@ -438,7 +432,7 @@ const S: Record<string, React.CSSProperties> = {
   invBtn:    { width: '100%', padding: 14, background: '#fff', border: 'none', borderRadius: 12, color: '#000', fontSize: 15, fontWeight: 700, cursor: 'pointer' },
   invWallet: { fontFamily: 'monospace', fontSize: 11, color: '#444', marginTop: 16 },
 
-  header:  { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', background: 'rgba(0,0,0,0.96)', borderBottom: '1px solid #1a1a1a', position: 'sticky', top: 0, zIndex: 100 },
+  header:  { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', background: 'rgba(0,0,0,0.96)',  position: 'sticky', top: 0, zIndex: 100 },
   hLogo:   { display: 'flex', alignItems: 'center', gap: 8 },
   hN:      { fontSize: 22, fontWeight: 900, color: '#06b6d4' },
   hText:   { fontFamily: 'monospace', fontSize: 13, letterSpacing: 3 },
