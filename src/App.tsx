@@ -19,6 +19,7 @@ async function apiFetch(path: string, fid: number, wallet: string, body?: object
 const TIER_COLOR: Record<string, string> = { bronze: '#cd7f32', silver: '#94a3b8', gold: '#f59e0b', diamond: '#8b5cf6' };
 const TIER_EMOJI: Record<string, string> = { bronze: '🥉', silver: '🥈', gold: '🥇', diamond: '💎' };
 const TIER_MULTI: Record<string, number> = { bronze: 2, silver: 5, gold: 10, diamond: 30 };
+const TIER_WINDOW: Record<string, number> = { bronze: 21600, silver: 43200, gold: 86400, diamond: 0 };
 const TIER_INTERVAL: Record<string, number> = { bronze: 30000, silver: 30000, gold: 30000, diamond: 30000 };
 
 function fmt(s: number) {
@@ -260,7 +261,15 @@ export default function App() {
                 <div style={{ ...S.nGlyph, ...(nodeOn ? S.nGlyphOn : {}) }}>N</div>
                 <div style={S.nSub}>{nodeOn ? 'RUNNING' : 'TAP TO START'}</div>
               </div>
-              <div style={S.uptimeTxt}>{fmt(uptime)}</div>
+              {user?.tier !== 'diamond' && (() => {
+                const window = TIER_WINDOW[user?.tier || 'bronze'];
+                const remaining = Math.max(0, window - uptime);
+                if (uptime >= window && nodeOn) {
+                  return <div style={S.uptimeTxt}>🔄 Restart your node</div>;
+                }
+                return <div style={S.uptimeTxt}>{fmt(remaining)}</div>;
+              })()}
+              {user?.tier === 'diamond' && <div style={S.uptimeTxt}>∞ CONTINUOUS</div>}
               <div style={S.statsGrid}>
                 <div style={S.statBox}><span style={S.statV}>+{sessionPts}</span><span style={S.statL}>Session</span></div>
                 <div style={S.statBox}><span style={{ ...S.statV, color: TIER_COLOR[userTier] }}>{userTier.toUpperCase()}</span><span style={S.statL}>Tier</span></div>
