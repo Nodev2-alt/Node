@@ -20,7 +20,7 @@
     "screenshotUrls": ["https://nodev2-theta.vercel.app/image.png"],
     "ogTitle": "Node - Run a node. Earn NODE.",
     "ogDescription": "Run a node on Base. Earn points. Get NODE tokens.",
-    "noIndex": false,
+    "noIndex": "false",
     "buttonTitle": "Run Node",
     "splashImageUrl": "https://nodev2-theta.vercel.app/icon.png",
     "splashBackgroundColor": "#000000",
