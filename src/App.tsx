@@ -45,9 +45,6 @@ export default function App() {
   const [claimCountdown, setClaimCountdown] = useState(0);
   const [leaderboard, setLeaderboard] = useState<any>(null);
   const [referrals, setReferrals] = useState<any>(null);
-  const [inviteCode, setInviteCode] = useState('');
-  const [inviteError, setInviteError] = useState('');
-  const [needsInvite, setNeedsInvite] = useState(false);
   const [loading, setLoading] = useState(true);
   const [pulsing, setPulsing] = useState(false);
 
