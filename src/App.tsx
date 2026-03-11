@@ -18,8 +18,8 @@ async function apiFetch(path: string, fid: number, wallet: string, body?: object
 
 const TIER_COLOR: Record<string, string> = { bronze: '#cd7f32', silver: '#94a3b8', gold: '#f59e0b', diamond: '#8b5cf6' };
 const TIER_EMOJI: Record<string, string> = { bronze: '🥉', silver: '🥈', gold: '🥇', diamond: '💎' };
-const TIER_MULTI: Record<string, number> = { bronze: 1, silver: 5, gold: 10, diamond: 30 };
-const TIER_INTERVAL: Record<string, number> = { bronze: 60000, silver: 30000, gold: 30000, diamond: 30000 };
+const TIER_MULTI: Record<string, number> = { bronze: 2, silver: 5, gold: 10, diamond: 30 };
+const TIER_INTERVAL: Record<string, number> = { bronze: 30000, silver: 30000, gold: 30000, diamond: 30000 };
 
 function fmt(s: number) {
   const h = String(Math.floor(s / 3600)).padStart(2, '0');
