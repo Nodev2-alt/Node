@@ -94,9 +94,12 @@ export default function App() {
         const lb = await apiFetch('/leaderboard', f, w);
         setLeaderboard(lb);
       } else {
-        setNeedsInvite(true);
+        // Auto-register as Bronze
+        await autoRegister(f, w);
       }
-    } catch (_e) { setNeedsInvite(true); }
+    } catch (_e) {
+      await autoRegister(f, w);
+    }
     setLoading(false);
   }
 
@@ -127,25 +130,17 @@ export default function App() {
     claimRef.current = setInterval(update, 1000);
   }
 
-  async function handleRegister(_skipInvite?: boolean) {
-    if (!_skipInvite && !inviteCode.trim()) return setInviteError('Enter your invite code');
-    if (!address) return setInviteError('Wallet not connected');
-    setInviteError('');
-    if (!_skipInvite && inviteCode.trim()) {
-      const check = await apiFetch(`/referral/resolve/${inviteCode.trim()}`, fid, address);
-      if (!check.valid) return setInviteError(check.error || 'Invalid or already used code');
-    }
+  async function autoRegister(f: number, w: string) {
     const ctx = await sdk.context;
-    const data = await apiFetch('/user/register', fid, address, {
+    const data = await apiFetch('/user/register', f, w, {
       username: ctx?.user?.username || '',
       display_name: ctx?.user?.displayName || '',
       pfp_url: ctx?.user?.pfpUrl || '',
-      fid,
-      wallet: address,
-      invite_code: _skipInvite ? '' : inviteCode.trim(),
+      fid: f,
+      wallet: w,
+      invite_code: '',
     });
-    if (data.user) { setUser(data.user); setNeedsInvite(false); loadUser(fid, address); }
-    else setInviteError(data.error || 'Registration failed');
+    if (data.user) { setUser(data.user); setNeedsInvite(false); loadUser(f, w); }
   }
 
   async function handleToggleNode() {
@@ -211,25 +206,6 @@ export default function App() {
       <div style={S.invTitle}>NODE</div>
       <div style={S.invSub}>Connect your wallet to continue</div>
       <button style={S.invBtn} onClick={() => connect({ connector: connectors[0] })}>Connect Wallet</button>
-    </div>
-  );
-
-  if (needsInvite) return (
-    <div style={S.center}>
-      <div style={S.bigN}>N</div>
-      <div style={S.invTitle}>NODE</div>
-      <div style={S.invSub}>Invite only. Get a code from an existing member.</div>
-      <input
-        style={S.invInput}
-        placeholder="Enter invite code (PRX-XXXXXX)"
-        value={inviteCode}
-        onChange={e => setInviteCode(e.target.value.toUpperCase())}
-        onKeyDown={e => { if (e.key === 'Enter') handleRegister(); }}
-      />
-      {inviteError && <div style={S.invErr}>{inviteError}</div>}
-      <button style={S.invBtn} onClick={() => handleRegister(false)}>Enter Node</button>
-      <button style={{...S.invBtn, background: 'transparent', border: '1px solid #333', color: '#fff', marginTop: 8}} onClick={() => handleRegister(true)}>Skip — Join as Bronze</button>
-      <div style={S.invWallet}>{address.slice(0,6)}...{address.slice(-4)}</div>
     </div>
   );
 
