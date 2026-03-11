@@ -127,7 +127,7 @@ export default function App() {
     claimRef.current = setInterval(update, 1000);
   }
 
-  async function handleRegister(skipInvite?: boolean) {
+  async function handleRegister(_skipInvite?: boolean) {
     if (!inviteCode.trim()) return setInviteError('Enter your invite code');
     if (!address) return setInviteError('Wallet not connected');
     setInviteError('');
