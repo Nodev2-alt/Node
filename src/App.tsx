@@ -50,9 +50,7 @@ export default function App() {
   const [pulsing, setPulsing] = useState(false);
 
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const uptimeRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const claimRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const userTier = user?.tier || 'bronze';
+  const uptimeRef = useRef<ReturnType<typeof setInterval> | null>(null);  const userTier = user?.tier || 'bronze';
 
   useEffect(() => {
     async function init() {
@@ -86,10 +84,7 @@ export default function App() {
           const earnedSoFar = Math.floor(elapsed / 30) * (TIER_MULTI[data.user.tier] || 1);
           setSessionPts(earnedSoFar);
           startTick(f, w, data.user.tier);
-        }
-        if (data.claim?.can_claim) setClaimReady(true);
-        else if (data.claim?.next_claim_at) startClaimCd(new Date(data.claim.next_claim_at));
-        const lb = await apiFetch('/leaderboard', f, w);
+        }        const lb = await apiFetch('/leaderboard', f, w);
         setLeaderboard(lb);
       } else {
         // Auto-register as Bronze
@@ -121,7 +116,7 @@ export default function App() {
   function startClaimCd(next: Date) {
     const update = () => {
       const ms = next.getTime() - Date.now();
-      if (ms <= 0) { setClaimReady(true); setClaimCountdown(0); if (claimRef.current) clearInterval(claimRef.current); }
+      if (ms <= 0) { if (claimRef.current) clearInterval(claimRef.current); }
       else setClaimCountdown(Math.floor(ms / 1000));
     };
     update();
@@ -161,17 +156,7 @@ export default function App() {
       stopTick(); setNodeOn(false); setUptime(0); setSessionPts(0);
     } else {
       const res = await apiFetch('/node/start', fid, address, {});
-      if (res.success) { setNodeOn(true); startTick(fid, address, userTier); setClaimReady(false); }
-    }
-  }
-
-  async function handleClaim() {
-    if (!claimReady || !address) return;
-    const res = await apiFetch('/node/claim', fid, address, {});
-    if (res.success) {
-      setUser((u: User) => ({ ...u, points: res.total_points }));
-      setNodeOn(false); stopTick(); setUptime(0); setSessionPts(0); setClaimReady(false);
-      if (res.next_claim_at) startClaimCd(new Date(res.next_claim_at));
+      if (res.success) { setNodeOn(true); startTick(fid, address, userTier); }
     }
   }
 
