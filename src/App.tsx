@@ -41,8 +41,6 @@ export default function App() {
   const [nodeOn, setNodeOn] = useState(false);
   const [uptime, setUptime] = useState(0);
   const [sessionPts, setSessionPts] = useState(0);
-  const [claimReady, setClaimReady] = useState(false);
-  const [claimCountdown, setClaimCountdown] = useState(0);
   const [leaderboard, setLeaderboard] = useState<any>(null);
   const [referrals, setReferrals] = useState<any>(null);
   const [refInputCode, setRefInputCode] = useState('');
@@ -273,9 +271,6 @@ export default function App() {
             <div style={S.actions}>
               <button style={nodeOn ? S.btnSec : S.btnPri} onClick={handleToggleNode}>
                 {nodeOn ? 'Stop Node' : 'Start Node'}
-              </button>
-              <button style={claimReady ? S.btnCyan : S.btnDis} onClick={handleClaim} disabled={!claimReady}>
-                {claimReady ? 'Claim Points' : claimCountdown > 0 ? `Next claim in ${fmtCD(claimCountdown)}` : 'Claim Points'}
               </button>
             </div>
 
