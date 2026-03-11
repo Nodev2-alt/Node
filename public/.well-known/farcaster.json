@@ -4,7 +4,7 @@
     "payload": "eyJkb21haW4iOiJub2RldjItdGhldGEudmVyY2VsLmFwcCJ9",
     "signature": "d5SDyZAfDN4LyYvZjDKURS9qvBF0ctHJkDd277t4gjBmzrkia2l6vKwc7SCrSj42Ep8sGP72aVCuxoea4MfCWRw="
   },
-  "frame": {
+  "miniapp": {
     "version": "1",
     "name": "Node",
     "primaryCategory": "utility",
@@ -20,7 +20,6 @@
     "screenshotUrls": ["https://nodev2-theta.vercel.app/image.png"],
     "ogTitle": "Node - Run a node. Earn NODE.",
     "ogDescription": "Run a node on Base. Earn points. Get NODE tokens.",
-    "noIndex": "false",
     "buttonTitle": "Run Node",
     "splashImageUrl": "https://nodev2-theta.vercel.app/icon.png",
     "splashBackgroundColor": "#000000",
