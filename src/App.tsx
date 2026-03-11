@@ -28,9 +28,6 @@ function fmt(s: number) {
   const sec = String(s % 60).padStart(2, '0');
   return `${h}:${m}:${sec}`;
 }
-function fmtCD(s: number) {
-  return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m ${s % 60}s`;
-}
 
 export default function App() {
   const { address, isConnected } = useAccount();
@@ -113,15 +110,6 @@ export default function App() {
     if (uptimeRef.current) clearInterval(uptimeRef.current);
   }
 
-  function startClaimCd(next: Date) {
-    const update = () => {
-      const ms = next.getTime() - Date.now();
-      if (ms <= 0) { if (claimRef.current) clearInterval(claimRef.current); }
-      else setClaimCountdown(Math.floor(ms / 1000));
-    };
-    update();
-    claimRef.current = setInterval(update, 1000);
-  }
 
   async function autoRegister(f: number, w: string) {
     const ctx = await sdk.context;
