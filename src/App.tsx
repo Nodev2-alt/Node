@@ -137,7 +137,7 @@ export default function App() {
       wallet: w,
       invite_code: '',
     });
-    if (data.user) { setUser(data.user); setNeedsInvite(false); loadUser(f, w); }
+    if (data.user) { setUser(data.user); loadUser(f, w); }
   }
 
   async function handleToggleNode() {
